@@ -39,32 +39,38 @@ A comprehensive bilingual (English/Arabic) web application for managing real est
 
 ## Firebase Configuration
 
-### Important Setup Steps
+**✅ Firebase is now fully configured!** The application is ready to use with:
 
-1. **Replace API Keys**: Open `src/services/firebase.js` and replace:
-   - `YOUR_API_KEY` with your actual Firebase API key
-   - `YOUR_APP_ID` with your actual Firebase App ID
+- **Firebase Authentication** - Email/password authentication
+- **Cloud Firestore** - Real-time database for all app data
+- **Firebase Storage** - File storage for images, videos, and 3D models
+- **Firebase Cloud Functions** - Server-side operations with Admin SDK
+- **Firebase Analytics** - User behavior tracking
 
-2. **Get Your Firebase Credentials**:
-   - Go to [Firebase Console](https://console.firebase.google.com/)
-   - Select your project: `skyproperties-cf5c7`
-   - Navigate to Project Settings > General
-   - Scroll to "Your apps" section
-   - Copy your Web API Key and App ID
+### What's Included
 
-### Firebase Services Setup
+1. **Frontend Configuration**: All Firebase credentials are set up in `src/services/firebase.js`
+2. **Backend Functions**: Cloud Functions with Admin SDK in the `functions/` directory
+3. **Security Rules**: Firestore and Storage security rules are configured
+4. **API Service Layer**: Ready-to-use API client in `src/services/api.js`
 
-1. **Firestore Database**:
-   - Enable Firestore in your Firebase Console
-   - Collections will be created automatically when data is added
+### Quick Start
 
-2. **Firebase Storage**:
-   - Enable Storage in Firebase Console
-   - Used for images, videos, and 3D GLB models
+```bash
+# Install all dependencies
+npm install
+cd functions && npm install && cd ..
 
-3. **Firebase Authentication**:
-   - Enable Email/Password authentication
-   - Optionally enable Google Sign-in
+# Start local development with emulators
+firebase emulators:start
+```
+
+In another terminal:
+```bash
+npm run dev
+```
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 
 ## Installation
 
@@ -176,12 +182,31 @@ Toggle between light and dark mode using the sun/moon icon in the header.
 
 Theme preference is saved in localStorage and applied automatically on subsequent visits.
 
+## Cloud Functions & Backend
+
+The application includes Firebase Cloud Functions for admin operations:
+
+### Available Endpoints
+
+**User Management** (`/userManagement`)
+- `POST /create-admin` - Create new admin users
+- `POST /update-user-role` - Update user roles
+- `DELETE /delete-user/:userId` - Delete users
+- `GET /users` - List all users with filtering
+
+**Analytics** (`/analytics`)
+- `GET /system-stats` - Get system-wide statistics
+- `GET /revenue-report` - Generate revenue reports
+
+All endpoints require Firebase Authentication tokens.
+
 ## Important Notes
 
-- **No Dummy Data**: The application starts with empty collections. Use the admin panel to add data.
-- **Firebase Only**: This project uses Firebase exclusively - no Supabase or other databases.
-- **API Keys Required**: You must add your Firebase API key and App ID before the app will work.
-- **Admin Creation**: The first user must be manually set as admin in Firebase Console (Firestore > users collection > set role: "admin").
+- **Firebase Configured**: All Firebase services are set up and ready to use
+- **Security Rules**: Firestore and Storage rules are configured for production
+- **Admin SDK**: Backend functions use Firebase Admin SDK for privileged operations
+- **No Dummy Data**: The application starts with empty collections
+- **Admin Creation**: First user must be set as admin in Firebase Console
 
 ## Creating Your First Admin User
 
@@ -194,29 +219,19 @@ Theme preference is saved in localStorage and applied automatically on subsequen
 
 ## Security Rules
 
-Remember to set up proper Firebase Security Rules for production:
+✅ **Security rules are already configured!**
 
-```javascript
-// Firestore Rules Example
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth.uid == userId ||
-                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
+- **Firestore Rules**: See `firestore.rules` for complete database security
+- **Storage Rules**: See `storage.rules` for file upload security
 
-    match /properties/{propertyId} {
-      allow read: if true; // Public read for guests
-      allow write: if request.auth != null &&
-                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'manager'];
-    }
+Key security features:
+- Role-based access control (Admin, Manager, Owner, Tenant, Service Provider)
+- Public read for properties and units (guest browsing)
+- Authenticated write operations with role verification
+- File size and type validation for uploads
+- User data isolation and privacy protection
 
-    // Add more rules for other collections
-  }
-}
-```
+Deploy rules with: `firebase deploy --only firestore:rules,storage:rules`
 
 ## Browser Support
 

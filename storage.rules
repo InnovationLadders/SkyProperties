@@ -1,0 +1,58 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isManager() {
+      return isAuthenticated() &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['admin', 'manager'];
+    }
+
+    function isValidImageUpload() {
+      return request.resource.size < 10 * 1024 * 1024 &&
+             request.resource.contentType.matches('image/.*');
+    }
+
+    function isValidVideoUpload() {
+      return request.resource.size < 100 * 1024 * 1024 &&
+             request.resource.contentType.matches('video/.*');
+    }
+
+    function isValidModelUpload() {
+      return request.resource.size < 50 * 1024 * 1024 &&
+             (request.resource.contentType == 'model/gltf-binary' ||
+              request.resource.contentType == 'application/octet-stream');
+    }
+
+    match /properties/{propertyId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isManager() &&
+                     (isValidImageUpload() || isValidVideoUpload() || isValidModelUpload());
+    }
+
+    match /units/{unitId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isManager() &&
+                     (isValidImageUpload() || isValidVideoUpload() || isValidModelUpload());
+    }
+
+    match /tickets/{ticketId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidImageUpload();
+    }
+
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if (isAuthenticated() && request.auth.uid == userId && isValidImageUpload()) ||
+                     isAdmin();
+    }
+  }
+}

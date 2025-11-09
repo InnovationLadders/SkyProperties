@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "سكاي بروبرتيز",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "التسجيل",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "loading": "جاري التحميل...",
+    "submit": "إرسال",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "viewDetails": "عرض التفاصيل",
+    "browseAsGuest": "تصفح كزائر",
+    "continueAsGuest": "المتابعة كزائر",
+    "createAccount": "إنشاء حساب"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "properties": "العقارات",
+    "dashboard": "لوحة التحكم",
+    "profile": "الملف الشخصي",
+    "admin": "الإدارة",
+    "tickets": "التذاكر",
+    "payments": "المدفوعات",
+    "settings": "الإعدادات"
+  },
+  "landing": {
+    "hero": {
+      "title": "اعثر على العقار المثالي",
+      "subtitle": "اكتشف وأدر واستثمر في العقارات بسهولة",
+      "cta": "ابدأ الاستكشاف"
+    },
+    "features": {
+      "title": "لماذا تختار سكاي بروبرتيز",
+      "management": "إدارة عقارية شاملة",
+      "managementDesc": "إدارة العقارات والوحدات والمستأجرين والمدفوعات في مكان واحد",
+      "marketplace": "سوق البيع والإيجار",
+      "marketplaceDesc": "تصفح العقارات المتاحة مع التصور ثلاثي الأبعاد",
+      "maintenance": "الخدمات والصيانة",
+      "maintenanceDesc": "طلب وتتبع الصيانة مع مقدمي الخدمات المعتمدين"
+    },
+    "search": {
+      "placeholder": "ابحث عن طريق الموقع أو النوع أو السعر...",
+      "filters": {
+        "city": "المدينة",
+        "priceRange": "نطاق السعر",
+        "type": "النوع",
+        "status": "الحالة"
+      }
+    }
+  },
+  "auth": {
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "name": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "role": "نوع الحساب",
+    "loginTitle": "مرحباً بعودتك",
+    "registerTitle": "إنشاء حسابك",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "roles": {
+      "owner": "مالك عقار",
+      "tenant": "مستأجر",
+      "provider": "مقدم خدمة",
+      "manager": "مدير عقارات"
+    }
+  },
+  "property": {
+    "title": "العقارات",
+    "addProperty": "إضافة عقار",
+    "editProperty": "تعديل العقار",
+    "propertyName": "اسم العقار",
+    "city": "المدينة",
+    "description": "الوصف",
+    "model": "نموذج المبنى ثلاثي الأبعاد",
+    "thumbnail": "صورة مصغرة",
+    "manager": "مدير العقار",
+    "units": "الوحدات",
+    "availableUnits": "الوحدات المتاحة",
+    "view3D": "عرض ثلاثي الأبعاد"
+  },
+  "unit": {
+    "title": "الوحدات",
+    "addUnit": "إضافة وحدة",
+    "editUnit": "تعديل الوحدة",
+    "unitNumber": "رقم الوحدة",
+    "floor": "الطابق",
+    "type": "النوع",
+    "area": "المساحة (متر مربع)",
+    "rentValue": "قيمة الإيجار",
+    "saleValue": "قيمة البيع",
+    "status": "الحالة",
+    "owner": "المالك",
+    "tenant": "المستأجر",
+    "blueprint": "المخطط",
+    "media": "الصور والفيديوهات",
+    "model3D": "نموذج ثلاثي الأبعاد",
+    "forRent": "للإيجار",
+    "forSale": "للبيع",
+    "occupied": "مشغول",
+    "available": "متاح",
+    "types": {
+      "apartment": "شقة",
+      "villa": "فيلا",
+      "office": "مكتب",
+      "shop": "محل",
+      "warehouse": "مستودع"
+    }
+  },
+  "ticket": {
+    "title": "تذاكر الصيانة",
+    "createTicket": "إنشاء تذكرة",
+    "ticketNumber": "التذكرة رقم",
+    "category": "الفئة",
+    "description": "الوصف",
+    "status": "الحالة",
+    "priority": "الأولوية",
+    "assignTo": "تعيين لمقدم الخدمة",
+    "attachments": "المرفقات",
+    "comments": "التعليقات",
+    "addComment": "إضافة تعليق",
+    "statuses": {
+      "open": "مفتوح",
+      "assigned": "معين",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "rated": "مقيم",
+      "closed": "مغلق"
+    },
+    "categories": {
+      "plumbing": "سباكة",
+      "electrical": "كهرباء",
+      "cleaning": "تنظيف",
+      "painting": "دهان",
+      "hvac": "تكييف",
+      "other": "أخرى"
+    }
+  },
+  "payment": {
+    "title": "المدفوعات",
+    "makePayment": "إجراء دفع",
+    "paymentHistory": "سجل المدفوعات",
+    "amount": "المبلغ",
+    "method": "طريقة الدفع",
+    "type": "نوع الدفع",
+    "date": "التاريخ",
+    "status": "الحالة",
+    "invoice": "تحميل الفاتورة",
+    "types": {
+      "rent": "إيجار",
+      "fee": "رسوم خدمة",
+      "commission": "عمولة",
+      "sale": "بيع عقار",
+      "maintenance": "صيانة"
+    }
+  },
+  "dashboard": {
+    "overview": "نظرة عامة",
+    "stats": "الإحصائيات",
+    "recentActivity": "النشاط الأخير",
+    "quickActions": "إجراءات سريعة",
+    "notifications": "الإشعارات"
+  },
+  "admin": {
+    "title": "لوحة الإدارة",
+    "users": "إدارة المستخدمين",
+    "properties": "إدارة العقارات",
+    "units": "إدارة الوحدات",
+    "tickets": "إدارة التذاكر",
+    "payments": "إدارة المدفوعات",
+    "providers": "مقدمو الخدمات",
+    "settings": "إعدادات النظام",
+    "analytics": "التحليلات",
+    "guestRequests": "طلبات الزوار"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "SkyProperties",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "viewDetails": "View Details",
+    "browseAsGuest": "Browse as Guest",
+    "continueAsGuest": "Continue as Guest",
+    "createAccount": "Create Account"
+  },
+  "nav": {
+    "home": "Home",
+    "properties": "Properties",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "admin": "Admin",
+    "tickets": "Tickets",
+    "payments": "Payments",
+    "settings": "Settings"
+  },
+  "landing": {
+    "hero": {
+      "title": "Find Your Perfect Property",
+      "subtitle": "Discover, manage, and invest in real estate with ease",
+      "cta": "Start Exploring"
+    },
+    "features": {
+      "title": "Why Choose SkyProperties",
+      "management": "Complete Property Management",
+      "managementDesc": "Manage properties, units, tenants, and payments all in one place",
+      "marketplace": "Buy & Rent Marketplace",
+      "marketplaceDesc": "Browse available properties with 3D visualization",
+      "maintenance": "Service & Maintenance",
+      "maintenanceDesc": "Request and track maintenance with verified service providers"
+    },
+    "search": {
+      "placeholder": "Search by location, type, or price...",
+      "filters": {
+        "city": "City",
+        "priceRange": "Price Range",
+        "type": "Type",
+        "status": "Status"
+      }
+    }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "role": "Account Type",
+    "loginTitle": "Welcome Back",
+    "registerTitle": "Create Your Account",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "roles": {
+      "owner": "Property Owner",
+      "tenant": "Tenant",
+      "provider": "Service Provider",
+      "manager": "Property Manager"
+    }
+  },
+  "property": {
+    "title": "Properties",
+    "addProperty": "Add Property",
+    "editProperty": "Edit Property",
+    "propertyName": "Property Name",
+    "city": "City",
+    "description": "Description",
+    "model": "3D Building Model",
+    "thumbnail": "Thumbnail Image",
+    "manager": "Property Manager",
+    "units": "Units",
+    "availableUnits": "Available Units",
+    "view3D": "View in 3D"
+  },
+  "unit": {
+    "title": "Units",
+    "addUnit": "Add Unit",
+    "editUnit": "Edit Unit",
+    "unitNumber": "Unit Number",
+    "floor": "Floor",
+    "type": "Type",
+    "area": "Area (sqm)",
+    "rentValue": "Rent Value",
+    "saleValue": "Sale Value",
+    "status": "Status",
+    "owner": "Owner",
+    "tenant": "Tenant",
+    "blueprint": "Blueprint",
+    "media": "Photos & Videos",
+    "model3D": "3D Model",
+    "forRent": "For Rent",
+    "forSale": "For Sale",
+    "occupied": "Occupied",
+    "available": "Available",
+    "types": {
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "office": "Office",
+      "shop": "Shop",
+      "warehouse": "Warehouse"
+    }
+  },
+  "ticket": {
+    "title": "Maintenance Tickets",
+    "createTicket": "Create Ticket",
+    "ticketNumber": "Ticket #",
+    "category": "Category",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "assignTo": "Assign to Provider",
+    "attachments": "Attachments",
+    "comments": "Comments",
+    "addComment": "Add Comment",
+    "statuses": {
+      "open": "Open",
+      "assigned": "Assigned",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "rated": "Rated",
+      "closed": "Closed"
+    },
+    "categories": {
+      "plumbing": "Plumbing",
+      "electrical": "Electrical",
+      "cleaning": "Cleaning",
+      "painting": "Painting",
+      "hvac": "HVAC",
+      "other": "Other"
+    }
+  },
+  "payment": {
+    "title": "Payments",
+    "makePayment": "Make Payment",
+    "paymentHistory": "Payment History",
+    "amount": "Amount",
+    "method": "Payment Method",
+    "type": "Payment Type",
+    "date": "Date",
+    "status": "Status",
+    "invoice": "Download Invoice",
+    "types": {
+      "rent": "Rent",
+      "fee": "Service Fee",
+      "commission": "Commission",
+      "sale": "Property Sale",
+      "maintenance": "Maintenance"
+    }
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "stats": "Statistics",
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions",
+    "notifications": "Notifications"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "users": "User Management",
+    "properties": "Property Management",
+    "units": "Unit Management",
+    "tickets": "Ticket Management",
+    "payments": "Payment Management",
+    "providers": "Service Providers",
+    "settings": "System Settings",
+    "analytics": "Analytics",
+    "guestRequests": "Guest Requests"
+  }
+}

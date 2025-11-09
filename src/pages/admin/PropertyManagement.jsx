@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ref as dbRef, get, set, update, remove, push } from 'firebase/database';
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
@@ -40,19 +40,14 @@ export const PropertyManagement = () => {
 
   const fetchProperties = async () => {
     try {
-      const propertiesReference = dbRef(db, 'properties');
-      const snapshot = await get(propertiesReference);
-      if (snapshot.exists()) {
-        const propertiesData = Object.entries(snapshot.val()).map(([id, data]) => ({
-          id,
-          ...data
-        }));
-        setProperties(propertiesData);
-        setFilteredProperties(propertiesData);
-      } else {
-        setProperties([]);
-        setFilteredProperties([]);
-      }
+      const propertiesRef = collection(db, 'properties');
+      const snapshot = await getDocs(propertiesRef);
+      const propertiesData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setProperties(propertiesData);
+      setFilteredProperties(propertiesData);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {
@@ -112,12 +107,11 @@ export const PropertyManagement = () => {
       };
 
       if (isEditMode) {
-        const propertyReference = dbRef(db, `properties/${selectedProperty.id}`);
-        await update(propertyReference, propertyData);
+        const propertyRef = doc(db, 'properties', selectedProperty.id);
+        await updateDoc(propertyRef, propertyData);
       } else {
-        const propertiesReference = dbRef(db, 'properties');
-        const newPropertyRef = push(propertiesReference);
-        await set(newPropertyRef, {
+        const newPropertyRef = doc(collection(db, 'properties'));
+        await setDoc(newPropertyRef, {
           ...propertyData,
           createdAt: new Date().toISOString(),
         });
@@ -137,8 +131,8 @@ export const PropertyManagement = () => {
     }
 
     try {
-      const propertyReference = dbRef(db, `properties/${propertyId}`);
-      await remove(propertyReference);
+      const propertyRef = doc(db, 'properties', propertyId);
+      await deleteDoc(propertyRef);
       await fetchProperties();
     } catch (error) {
       console.error('Error deleting property:', error);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ref, get, update, remove } from 'firebase/database';
+import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -31,19 +31,14 @@ export const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const usersRef = ref(db, 'users');
-      const snapshot = await get(usersRef);
-      if (snapshot.exists()) {
-        const usersData = Object.entries(snapshot.val()).map(([id, data]) => ({
-          id,
-          ...data
-        }));
-        setUsers(usersData);
-        setFilteredUsers(usersData);
-      } else {
-        setUsers([]);
-        setFilteredUsers([]);
-      }
+      const usersRef = collection(db, 'users');
+      const snapshot = await getDocs(usersRef);
+      const usersData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setUsers(usersData);
+      setFilteredUsers(usersData);
     } catch (error) {
       console.error('Error fetching users:', error);
     } finally {
@@ -58,8 +53,8 @@ export const UserManagement = () => {
 
   const handleUpdateUser = async () => {
     try {
-      const userRef = ref(db, `users/${selectedUser.id}`);
-      await update(userRef, {
+      const userRef = doc(db, 'users', selectedUser.id);
+      await updateDoc(userRef, {
         name: selectedUser.name,
         role: selectedUser.role,
         phone: selectedUser.phone,
@@ -78,8 +73,8 @@ export const UserManagement = () => {
     }
 
     try {
-      const userRef = ref(db, `users/${userId}`);
-      await remove(userRef);
+      const userRef = doc(db, 'users', userId);
+      await deleteDoc(userRef);
       await fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);

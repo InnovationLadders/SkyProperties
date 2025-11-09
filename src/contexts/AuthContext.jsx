@@ -6,7 +6,7 @@ import {
   signOut as firebaseSignOut,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { ref, get, set, onValue } from 'firebase/database';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
 
 const AuthContext = createContext({});
@@ -28,10 +28,10 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
-        const userRef = ref(db, `users/${firebaseUser.uid}`);
-        const userSnap = await get(userRef);
+        const userRef = doc(db, 'users', firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          setUserProfile(userSnap.val());
+          setUserProfile(userSnap.data());
         }
       } else {
         setUser(null);
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }) => {
   const signUp = async (email, password, userData) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
 
-    const userRef = ref(db, `users/${result.user.uid}`);
-    await set(userRef, {
+    const userRef = doc(db, 'users', result.user.uid);
+    await setDoc(userRef, {
       ...userData,
       email,
       createdAt: new Date().toISOString(),

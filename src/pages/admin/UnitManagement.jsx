@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../../services/firebase';
+import { ref as dbRef, get, set, update, remove, push } from 'firebase/database';
+import { db } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Modal } from '../../components/ui/Modal';
@@ -46,19 +45,17 @@ export const UnitManagement = () => {
   const fetchData = async () => {
     try {
       const [unitsSnapshot, propertiesSnapshot] = await Promise.all([
-        getDocs(collection(db, 'units')),
-        getDocs(collection(db, 'properties'))
+        get(dbRef(db, 'units')),
+        get(dbRef(db, 'properties'))
       ]);
 
-      const unitsData = unitsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const unitsData = unitsSnapshot.exists()
+        ? Object.entries(unitsSnapshot.val()).map(([id, data]) => ({ id, ...data }))
+        : [];
 
-      const propertiesData = propertiesSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const propertiesData = propertiesSnapshot.exists()
+        ? Object.entries(propertiesSnapshot.val()).map(([id, data]) => ({ id, ...data }))
+        : [];
 
       setUnits(unitsData);
       setFilteredUnits(unitsData);
@@ -106,9 +103,12 @@ export const UnitManagement = () => {
       };
 
       if (isEditMode) {
-        await updateDoc(doc(db, 'units', selectedUnit.id), unitData);
+        const unitReference = dbRef(db, `units/${selectedUnit.id}`);
+        await update(unitReference, unitData);
       } else {
-        await addDoc(collection(db, 'units'), {
+        const unitsReference = dbRef(db, 'units');
+        const newUnitRef = push(unitsReference);
+        await set(newUnitRef, {
           ...unitData,
           createdAt: new Date().toISOString(),
           media: [],
@@ -130,7 +130,8 @@ export const UnitManagement = () => {
     }
 
     try {
-      await deleteDoc(doc(db, 'units', unitId));
+      const unitReference = dbRef(db, `units/${unitId}`);
+      await remove(unitReference);
       await fetchData();
     } catch (error) {
       console.error('Error deleting unit:', error);

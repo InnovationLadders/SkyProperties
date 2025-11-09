@@ -1,0 +1,46 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".validate": "newData.hasChildren(['email', 'role', 'createdAt'])"
+      }
+    },
+    "properties": {
+      ".read": "auth != null",
+      "$propertyId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+        ".validate": "newData.hasChildren(['name', 'city'])"
+      }
+    },
+    "units": {
+      ".read": "auth != null",
+      "$unitId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager' || root.child('users').child(auth.uid).child('role').val() === 'owner')",
+        ".validate": "newData.hasChildren(['unitNumber', 'propertyId', 'status'])"
+      }
+    },
+    "tickets": {
+      "$ticketId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['category', 'status', 'createdAt'])"
+      }
+    },
+    "payments": {
+      "$paymentId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+        ".validate": "newData.hasChildren(['amount', 'type', 'timestamp'])"
+      }
+    },
+    "guestRequests": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'manager')",
+      "$requestId": {
+        ".write": "true",
+        ".validate": "newData.hasChildren(['guestEmail', 'requestType', 'createdAt'])"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs } from 'firebase/firestore';
+import { ref, get } from 'firebase/database';
 import { db } from '../../services/firebase';
 import { Card, CardContent, CardHeader } from '../../components/ui/Card';
 import { Building2, Home, Ticket, DollarSign } from 'lucide-react';
@@ -23,20 +23,24 @@ export const Analytics = () => {
   const fetchAnalytics = async () => {
     try {
       const [propertiesSnap, unitsSnap, ticketsSnap, paymentsSnap] = await Promise.all([
-        getDocs(collection(db, 'properties')),
-        getDocs(collection(db, 'units')),
-        getDocs(collection(db, 'tickets')),
-        getDocs(collection(db, 'payments')),
+        get(ref(db, 'properties')),
+        get(ref(db, 'units')),
+        get(ref(db, 'tickets')),
+        get(ref(db, 'payments')),
       ]);
 
-      const payments = paymentsSnap.docs.map(doc => doc.data());
+      const properties = propertiesSnap.exists() ? Object.keys(propertiesSnap.val()) : [];
+      const units = unitsSnap.exists() ? Object.keys(unitsSnap.val()) : [];
+      const tickets = ticketsSnap.exists() ? Object.keys(ticketsSnap.val()) : [];
+      const payments = paymentsSnap.exists() ? Object.values(paymentsSnap.val()) : [];
+
       const totalRevenue = payments.reduce((sum, payment) => sum + (payment.amount || 0), 0);
 
       setStats({
-        totalProperties: propertiesSnap.size,
-        totalUnits: unitsSnap.size,
-        totalTickets: ticketsSnap.size,
-        totalPayments: paymentsSnap.size,
+        totalProperties: properties.length,
+        totalUnits: units.length,
+        totalTickets: tickets.length,
+        totalPayments: payments.length,
         totalRevenue,
       });
     } catch (error) {

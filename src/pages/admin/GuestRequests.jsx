@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { ref, get, update } from 'firebase/database';
 import { db } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -31,14 +31,19 @@ export const GuestRequests = () => {
 
   const fetchRequests = async () => {
     try {
-      const requestsRef = collection(db, 'guestRequests');
-      const snapshot = await getDocs(requestsRef);
-      const requestsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setRequests(requestsData);
-      setFilteredRequests(requestsData);
+      const requestsRef = ref(db, 'guestRequests');
+      const snapshot = await get(requestsRef);
+      if (snapshot.exists()) {
+        const requestsData = Object.entries(snapshot.val()).map(([id, data]) => ({
+          id,
+          ...data
+        }));
+        setRequests(requestsData);
+        setFilteredRequests(requestsData);
+      } else {
+        setRequests([]);
+        setFilteredRequests([]);
+      }
     } catch (error) {
       console.error('Error fetching guest requests:', error);
     } finally {
@@ -53,7 +58,8 @@ export const GuestRequests = () => {
 
   const handleUpdateStatus = async (newStatus) => {
     try {
-      await updateDoc(doc(db, 'guestRequests', selectedRequest.id), {
+      const requestRef = ref(db, `guestRequests/${selectedRequest.id}`);
+      await update(requestRef, {
         status: newStatus,
         updatedAt: new Date().toISOString(),
       });

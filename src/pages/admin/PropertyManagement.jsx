@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref as dbRef, get, set, update, remove, push } from 'firebase/database';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -40,14 +40,19 @@ export const PropertyManagement = () => {
 
   const fetchProperties = async () => {
     try {
-      const propertiesRef = collection(db, 'properties');
-      const snapshot = await getDocs(propertiesRef);
-      const propertiesData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProperties(propertiesData);
-      setFilteredProperties(propertiesData);
+      const propertiesReference = dbRef(db, 'properties');
+      const snapshot = await get(propertiesReference);
+      if (snapshot.exists()) {
+        const propertiesData = Object.entries(snapshot.val()).map(([id, data]) => ({
+          id,
+          ...data
+        }));
+        setProperties(propertiesData);
+        setFilteredProperties(propertiesData);
+      } else {
+        setProperties([]);
+        setFilteredProperties([]);
+      }
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {
@@ -88,15 +93,15 @@ export const PropertyManagement = () => {
       let thumbnailUrl = isEditMode ? selectedProperty.thumbnail : null;
 
       if (modelFile) {
-        const modelRef = ref(storage, `properties/${Date.now()}_${modelFile.name}`);
-        await uploadBytes(modelRef, modelFile);
-        modelUrl = await getDownloadURL(modelRef);
+        const modelReference = storageRef(storage, `properties/${Date.now()}_${modelFile.name}`);
+        await uploadBytes(modelReference, modelFile);
+        modelUrl = await getDownloadURL(modelReference);
       }
 
       if (thumbnailFile) {
-        const thumbnailRef = ref(storage, `thumbnails/${Date.now()}_${thumbnailFile.name}`);
-        await uploadBytes(thumbnailRef, thumbnailFile);
-        thumbnailUrl = await getDownloadURL(thumbnailRef);
+        const thumbnailReference = storageRef(storage, `thumbnails/${Date.now()}_${thumbnailFile.name}`);
+        await uploadBytes(thumbnailReference, thumbnailFile);
+        thumbnailUrl = await getDownloadURL(thumbnailReference);
       }
 
       const propertyData = {
@@ -107,9 +112,12 @@ export const PropertyManagement = () => {
       };
 
       if (isEditMode) {
-        await updateDoc(doc(db, 'properties', selectedProperty.id), propertyData);
+        const propertyReference = dbRef(db, `properties/${selectedProperty.id}`);
+        await update(propertyReference, propertyData);
       } else {
-        await addDoc(collection(db, 'properties'), {
+        const propertiesReference = dbRef(db, 'properties');
+        const newPropertyRef = push(propertiesReference);
+        await set(newPropertyRef, {
           ...propertyData,
           createdAt: new Date().toISOString(),
         });
@@ -129,7 +137,8 @@ export const PropertyManagement = () => {
     }
 
     try {
-      await deleteDoc(doc(db, 'properties', propertyId));
+      const propertyReference = dbRef(db, `properties/${propertyId}`);
+      await remove(propertyReference);
       await fetchProperties();
     } catch (error) {
       console.error('Error deleting property:', error);

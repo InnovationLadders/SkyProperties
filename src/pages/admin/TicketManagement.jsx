@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { ref, get, update } from 'firebase/database';
 import { db } from '../../services/firebase';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -30,14 +30,19 @@ export const TicketManagement = () => {
 
   const fetchTickets = async () => {
     try {
-      const ticketsRef = collection(db, 'tickets');
-      const snapshot = await getDocs(ticketsRef);
-      const ticketsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setTickets(ticketsData);
-      setFilteredTickets(ticketsData);
+      const ticketsRef = ref(db, 'tickets');
+      const snapshot = await get(ticketsRef);
+      if (snapshot.exists()) {
+        const ticketsData = Object.entries(snapshot.val()).map(([id, data]) => ({
+          id,
+          ...data
+        }));
+        setTickets(ticketsData);
+        setFilteredTickets(ticketsData);
+      } else {
+        setTickets([]);
+        setFilteredTickets([]);
+      }
     } catch (error) {
       console.error('Error fetching tickets:', error);
     } finally {
@@ -52,7 +57,8 @@ export const TicketManagement = () => {
 
   const handleUpdateStatus = async (newStatus) => {
     try {
-      await updateDoc(doc(db, 'tickets', selectedTicket.id), {
+      const ticketRef = ref(db, `tickets/${selectedTicket.id}`);
+      await update(ticketRef, {
         status: newStatus,
         updatedAt: new Date().toISOString(),
       });

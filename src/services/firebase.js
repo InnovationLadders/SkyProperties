@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getDatabase } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
-import { getFunctions } from 'firebase/functions';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCfWTKNrS-JMMLmexOQhU3OL9Dn_b9ngRc",
   authDomain: "skyproperties-cf5c7.firebaseapp.com",
+  databaseURL: "https://skyproperties-cf5c7-default-rtdb.firebaseio.com",
   projectId: "skyproperties-cf5c7",
   storageBucket: "skyproperties-cf5c7.firebasestorage.app",
   messagingSenderId: "685192866695",
@@ -18,9 +18,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = getDatabase(app);
 export const storage = getStorage(app);
-export const functions = getFunctions(app);
 export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
 export default app;

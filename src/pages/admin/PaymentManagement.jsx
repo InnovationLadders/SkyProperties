@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs } from 'firebase/firestore';
+import { ref, get } from 'firebase/database';
 import { db } from '../../services/firebase';
 import { Input } from '../../components/ui/Input';
 import { Search } from 'lucide-react';
@@ -26,14 +26,19 @@ export const PaymentManagement = () => {
 
   const fetchPayments = async () => {
     try {
-      const paymentsRef = collection(db, 'payments');
-      const snapshot = await getDocs(paymentsRef);
-      const paymentsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setPayments(paymentsData);
-      setFilteredPayments(paymentsData);
+      const paymentsRef = ref(db, 'payments');
+      const snapshot = await get(paymentsRef);
+      if (snapshot.exists()) {
+        const paymentsData = Object.entries(snapshot.val()).map(([id, data]) => ({
+          id,
+          ...data
+        }));
+        setPayments(paymentsData);
+        setFilteredPayments(paymentsData);
+      } else {
+        setPayments([]);
+        setFilteredPayments([]);
+      }
     } catch (error) {
       console.error('Error fetching payments:', error);
     } finally {
